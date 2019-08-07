@@ -1,0 +1,125 @@
+---
+title: "Treeline Density"
+author: "Kelsey Elwood"
+date: "March 13, 2017"
+output: html_document
+---
+
+```{r Set Working Directory, echo = FALSE}
+setwd("/Users/elwoodk/Google Drive/ElwoodK_Research/Computation/Treeline/Density")
+library(mosaic)
+library(ggplot2)
+```
+
+```{r Load data, echo = FALSE, warning=FALSE, message=FALSE}
+tl.dens <- read.csv("CohortAndElevationCounts_10by10.csv")
+tl.all <- read.csv("/Users/elwoodk/Google Drive/ElwoodK_Research/TreelineBackUp/01Dec2016/Treeline/QuadrantData/AllTrees.csv")
+```
+
+```{r}
+p = ggplot(tl.all, aes(Z)) + 
+  geom_histogram(binwidth=10) +
+  xlab("Elevation (m)") + ylab ("Frequency (trees)") +
+  ggtitle("Histogram (Untransformed)")
+print(p)
+```
+
+    ```{r Transformations, echo = FALSE}
+par(mfrow = c(1,4), oma = c(0,0,1,0))
+hist(tl.all$Z, freq = FALSE, xlab = "Elevation (m)", main = "A. Non-transformed
+(skew = 1.2921, W = 0.8601*)")
+    mu1 = mean(tl.all$Z)
+    std1 = sd(tl.all$Z)
+    curve(dnorm(x, mean=mu1, sd=std1), add=TRUE, col = "red")    
+    
+Z_log <- log(tl.all$Z)
+    hist(Z_log, freq = FALSE, xlab = "Elevation (log_m)", main = "B. Log-transformed
+(skew = 1.2736, W = 0.86217*)")
+    Z_log1 <- log(tl.all$Z)
+    mu2 = mean(Z_log1)
+    std2 = sd(Z_log1)
+    curve(dnorm(x, mean=mu2, sd=std2), add=TRUE, col = "red") 
+
+Z_sqrt <- sqrt(tl.all$Z)
+    hist(Z_sqrt, freq = FALSE, xlab = "Elevation (sqrt_m)", main = "C. Square-Root transformed
+(skew = 1.2829, W = 0.86114*")
+    mu3 = mean(Z_sqrt)
+    std3 = sd(Z_sqrt)
+    curve(dnorm(x, mean=mu3, sd=std3), add=TRUE, col = "red")  
+# 
+# Z_exp <- exp(tl.all$Z)
+#     hist(Z_exp, freq = FALSE, xlab = "Elevation", main = "D. Exponentially transformed")
+#         mu4 = mean(Z_exp)
+#         std4 = sd(Z_exp)
+#         curve(dnorm(x, mean=mu4, sd=std4), add=TRUE, col = "red") 
+        
+Z_log10 <- log10(tl.all$Z)
+    hist(Z_log10, freq = FALSE, xlab = "Elevation (log10_m)", main = "D. Log10-transformed
+(skew = 1.2736, W = 0.86217*")
+    mu5 = mean(Z_log10)
+    std5 = sd(Z_log10)
+    curve(dnorm(x, mean=mu5, sd=std5), add=TRUE, col = "red") 
+        
+title("Treeline Density: Elevation Transformations", outer = TRUE)
+    ```
+
+    ```{r Transformations 2, echo = FALSE}
+par(mfrow = c(1,4), oma = c(0,0,1,0))
+hist(tl.all$Z, freq = FALSE, xlab = "Elevation", main = "A. Non-transformed")
+    mu1 = mean(tl.all$Z)
+    std1 = sd(tl.all$Z)
+    curve(dnorm(x, mean=mu1, sd=std1), add=TRUE, col = "red")    
+    
+
+
+Z_rt3 <- (tl.all$Z)^(-1/3)
+    hist(Z_rt3, freq = FALSE, xlab = "Elevation", main = "C. Square-Root transformed")
+    mu6 = mean(Z_rt3)
+    std6 = sd(Z_rt3)
+    curve(dnorm(x, mean=mu6, sd=std6), add=TRUE, col = "red")  
+    
+Z_logX <- log(-tl.all$Z)
+    hist(Z_logX, freq = FALSE, xlab = "Elevation", main = "B. Log-transformed")
+    mu7 = mean(Z_logX)
+    std7 = sd(Z_logX)
+    curve(dnorm(x, mean=mu7, sd=std7), add=TRUE, col = "red") 
+
+Z_recip <- (1/tl.all$Z)
+    hist(Z_recip, freq = FALSE, xlab = "Elevation", main = "C. Square-Root transformed")
+    mu8 = mean(Z_recip)
+    std8 = sd(Z_recip)
+    curve(dnorm(x, mean=mu8, sd=std8), add=TRUE, col = "red")  
+    
+Z_ctr <- scale(tl.all$Z, center = TRUE, scale = FALSE)
+        hist(tl.all$Z, freq = FALSE, main = "c.
+Centered data")
+        mu9 = mean(Z_ctr)
+        std9 = sd(Z_ctr)
+        curve(dnorm(x, mean=mu9, sd=std9), add=TRUE, col = "red")
+        
+title("Figure 3: Data Transformations on Elevation", outer = TRUE)
+
+Z_best <- 
+    ```
+    
+    ```{r Skewness & Shapiro Test: Elevation, echo = FALSE, message= FALSE, eval = FALSE}
+library(moments)
+agostino.test(tl.all$Z)
+agostino.test(Z_log)
+agostino.test(Z_sqrt)
+# agostino.test(Z_exp)
+agostino.test(Z_log10)
+agostino.test(Z_rt3)
+agostino.test(Z_logX)
+
+shapiro.test(tl.all$Z)
+shapiro.test(Z_log)
+shapiro.test(Z_sqrt)
+# shapiro.test(Z_exp)
+shapiro.test(Z_log10)
+```
+
+```{r}
+mod1 <- lm()
+```
+
