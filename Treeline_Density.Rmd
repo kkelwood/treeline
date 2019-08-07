@@ -1,6 +1,0 @@
----
-title: "Treeline Density"
-author: "Kelsey Elwood"
-date: "March 13, 2017"
-output: html_document
----
